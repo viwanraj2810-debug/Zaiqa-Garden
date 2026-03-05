@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery — Zaiqa Garden</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+/* ══════════════════════════════════════
+   TOKENS — exact match to main site
+   ══════════════════════════════════════ */
+:root {
+  --cream:        #f2ebe0;
+  --cream-dark:   #e8dfd1;
+  --white:        #faf8f4;
+  --maroon:       #7a2020;
+  --maroon-light: #9b3030;
+  --green:        #1e5c2e;
+  --green-light:  #2a7a3e;
+  --gold:         #c8902a;
+  --gold-light:   #e0a83a;
+  --dark1:        #1a1208;
+  --dark2:        #2a1a10;
+  --text-dark:    #1a1208;
+  --text-mid:     #4a3520;
+  --text-muted:   #8a7560;
+  --border:       #d4c8b0;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Outfit', system-ui, sans-serif;
+}
+
+/* ══════════════════════════════════════
+   RESET
+   ══════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--cream);
+  color: var(--text-dark);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+img { display: block; width: 100%; height: 100%; object-fit: cover; }
+a { text-decoration: none; color: inherit; }
+
+/* ══════════════════════════════════════
+   ANIMATIONS
+   ══════════════════════════════════════ */
+@keyframes marquee  { to { transform: translateX(-50%); } }
+@keyframes fadeUp   { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+@keyframes scaleIn  { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+@keyframes popIn    { from { opacity:0; transform:scale(0.92); } to { opacity:1; transform:scale(1); } }
+@keyframes spinIn   { from { opacity:0; transform:rotate(-8deg) scale(0.9); } to { opacity:1; transform:rotate(0) scale(1); } }
+
+/* ══════════════════════════════════════
+   MARQUEE
+   ══════════════════════════════════════ */
+.marquee-bar {
+  background: var(--green); padding: 9px 0; overflow: hidden;
+}
+.marquee-inner {
+  display: inline-flex; white-space: nowrap;
+  animation: marquee 26s linear infinite;
+}
+.marquee-inner span {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: #fff; padding: 0 28px;
+}
+.marquee-inner span::after { content: '✦'; margin-left: 28px; opacity: 0.4; }
+
+/* ══════════════════════════════════════
+   HEADER
+   ══════════════════════════════════════ */
+header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px; height: 72px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 200;
+  transition: box-shadow 0.3s;
+}
+header.elevated { box-shadow: 0 4px 24px rgba(26,18,8,0.10); }
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-icon {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 2px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--gold);
+}
+.logo-name {
+  font-family: var(--font-display);
+  font-size: 18px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+}
+.logo-name span { color: var(--maroon); }
+.logo-sub {
+  font-size: 9px; font-weight: 500;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--text-muted); display: block; margin-top: -2px;
+}
+.header-right { display: flex; align-items: center; gap: 20px; }
+.back-link {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-mid); display: flex; align-items: center; gap: 6px;
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--maroon); }
+.btn-reserve {
+  background: var(--maroon); color: #fff;
+  font-family: var(--font-body); font-size: 11px;
+  font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  padding: 10px 22px; border-radius: 4px; border: none;
+  cursor: pointer; transition: background 0.2s; text-decoration: none;
+  display: inline-block;
+}
+.btn-reserve:hover { background: var(--maroon-light); }
+
+/* ══════════════════════════════════════
+   HERO BANNER
+   ══════════════════════════════════════ */
+.gallery-hero {
+  background: var(--dark1);
+  padding: 80px 48px 72px;
+  position: relative; overflow: hidden;
+}
+.gallery-hero::before {
+  content: 'GALLERY';
+  position: absolute; right: -30px; top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-display);
+  font-size: clamp(80px, 16vw, 200px);
+  font-weight: 900; color: rgba(255,255,255,0.022);
+  letter-spacing: -6px; pointer-events: none;
+  line-height: 1; user-select: none;
+}
+/* Decorative gold corner accent */
+.gallery-hero::after {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 6px; height: 100%;
+  background: var(--gold-light);
+}
+.hero-eyebrow {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 5px; text-transform: uppercase;
+  color: var(--gold-light); display: block; margin-bottom: 16px;
+  animation: fadeUp 0.7s 0.1s ease both;
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 6.5vw, 88px);
+  font-weight: 900; line-height: 1.0;
+  color: #fff; text-transform: uppercase;
+  animation: fadeUp 0.7s 0.2s ease both;
+}
+.hero-title em { font-style: italic; color: var(--gold-light); font-weight: 600; }
+.hero-sub {
+  font-size: 14px; color: rgba(255,255,255,0.5);
+  margin-top: 14px; letter-spacing: 0.5px;
+  animation: fadeUp 0.7s 0.35s ease both;
+}
+.hero-divider {
+  width: 72px; height: 3px; background: var(--gold-light);
+  margin-top: 28px; border-radius: 2px;
+  transform-origin: left;
+  animation: scaleIn 0.8s 0.5s ease both;
+}
+.hero-stats {
+  display: flex; gap: 48px; margin-top: 36px;
+  animation: fadeUp 0.7s 0.6s ease both;
+}
+.hero-stat-num {
+  font-family: var(--font-display);
+  font-size: 36px; font-weight: 900; color: var(--gold-light); line-height: 1;
+}
+.hero-stat-label {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(255,255,255,0.4); margin-top: 4px;
+}
+
+/* ══════════════════════════════════════
+   FILTER BAR
+   ══════════════════════════════════════ */
+.filter-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 72px; z-index: 100;
+  padding: 0 48px;
+}
+.filter-inner {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 20px;
+}
+.filter-pills {
+  display: flex; gap: 0; overflow-x: auto;
+  scrollbar-width: none; flex: 1;
+}
+.filter-pills::-webkit-scrollbar { display: none; }
+.filter-pill {
+  flex-shrink: 0;
+  padding: 17px 22px;
+  font-family: var(--font-body);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-muted); background: transparent;
+  border: none; border-bottom: 3px solid transparent;
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  display: flex; align-items: center; gap: 7px;
+}
+.filter-pill:hover { color: var(--maroon); }
+.filter-pill.active {
+  color: var(--maroon);
+  border-bottom-color: var(--maroon);
+}
+.filter-pill-count {
+  background: var(--cream-dark); color: var(--text-muted);
+  font-size: 9px; font-weight: 700;
+  padding: 2px 7px; border-radius: 10px;
+  transition: all 0.2s;
+}
+.filter-pill.active .filter-pill-count {
+  background: var(--maroon); color: #fff;
+}
+.view-toggle {
+  display: flex; gap: 6px; flex-shrink: 0; padding: 12px 0;
+}
+.view-btn {
+  width: 36px; height: 36px; border-radius: 4px;
+  border: 1.5px solid var(--border);
+  background: transparent; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); font-size: 14px;
+  transition: all 0.2s;
+}
+.view-btn.active {
+  background: var(--maroon); border-color: var(--maroon); color: #fff;
+}
+.view-btn:hover:not(.active) { border-color: var(--maroon); color: var(--maroon); }
+
+/* ══════════════════════════════════════
+   GALLERY BODY
+   ══════════════════════════════════════ */
+.gallery-body {
+  padding: 48px 48px 80px;
+  max-width: 1400px; margin: 0 auto;
+}
+
+/* ── COUNT BAR ── */
+.count-bar {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+.count-text {
+  font-size: 12px; font-weight: 500;
+  color: var(--text-muted); letter-spacing: 1px;
+}
+.count-text strong { color: var(--text-dark); font-weight: 600; }
+
+/* ══════════════════════════════════════
+   MASONRY GRID (CSS columns)
+   ══════════════════════════════════════ */
+.masonry {
+  columns: 4 280px;
+  column-gap: 16px;
+}
+.masonry.grid-3 { columns: 3 320px; }
+.masonry.grid-2 { columns: 2 480px; }
+
+.gallery-item {
+  break-inside: avoid;
+  margin-bottom: 16px;
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--cream-dark);
+  display: block;
+}
+.gallery-item img {
+  display: block; width: 100%; height: auto;
+  transition: transform 0.55s cubic-bezier(0.25,0.1,0.25,1);
+}
+.gallery-item:hover img { transform: scale(1.06); }
+
+/* Overlay on hover */
+.gallery-item-overlay {
+  position: absolute; inset: 0;
+  background: rgba(26,18,8,0);
+  display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: flex-end;
+  padding: 20px;
+  transition: background 0.35s;
+}
+.gallery-item:hover .gallery-item-overlay {
+  background: rgba(26,18,8,0.52);
+}
+.overlay-cat {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold-light);
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.3s 0.05s, transform 0.3s 0.05s;
+}
+.overlay-title {
+  font-family: var(--font-display);
+  font-size: 18px; font-weight: 700;
+  color: #fff; line-height: 1.2; margin-top: 4px;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 0.3s 0.1s, transform 0.3s 0.1s;
+}
+.gallery-item:hover .overlay-cat,
+.gallery-item:hover .overlay-title {
+  opacity: 1; transform: translateY(0);
+}
+/* Expand icon */
+.overlay-expand {
+  position: absolute; top: 14px; right: 14px;
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.4);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 14px;
+  opacity: 0; transform: scale(0.7);
+  transition: opacity 0.25s, transform 0.25s;
+  backdrop-filter: blur(4px);
+}
+.gallery-item:hover .overlay-expand {
+  opacity: 1; transform: scale(1);
+}
+
+/* Category badge on card */
+.item-cat-badge {
+  position: absolute; top: 12px; left: 12px;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 2px;
+  color: #fff;
+  transition: opacity 0.25s;
+}
+.gallery-item:hover .item-cat-badge { opacity: 0; }
+.badge-food    { background: var(--maroon); }
+.badge-ambience{ background: var(--green); }
+.badge-events  { background: var(--gold); color: var(--dark1); }
+.badge-kitchen { background: var(--dark1); color: var(--gold-light); }
+.badge-people  { background: rgba(26,18,8,0.7); }
+
+/* Hidden items */
+.gallery-item.hidden {
+  display: none;
+}
+
+/* ══════════════════════════════════════
+   FEATURED ROW (full-width band)
+   ══════════════════════════════════════ */
+.featured-row {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1fr;
+  grid-template-rows: 340px;
+  gap: 16px; margin-bottom: 16px;
+}
+.featured-row .gallery-item { margin-bottom: 0; border-radius: 6px; }
+.featured-row .gallery-item img { height: 340px; }
+.featured-row .gallery-item:first-child img { height: 340px; }
+
+/* ══════════════════════════════════════
+   INSTAGRAM STRIP
+   ══════════════════════════════════════ */
+.insta-strip {
+  background: var(--dark1);
+  padding: 56px 48px;
+  text-align: center;
+  margin-top: 0;
+}
+.insta-eyebrow {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 5px; text-transform: uppercase;
+  color: var(--gold-light); margin-bottom: 10px;
+}
+.insta-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 900; color: #fff; text-transform: uppercase;
+}
+.insta-title span { font-style: italic; color: var(--gold-light); }
+.insta-sub {
+  font-size: 13px; color: rgba(255,255,255,0.45);
+  margin-top: 10px; margin-bottom: 36px;
+}
+.insta-scroll {
+  display: flex; gap: 12px;
+  overflow-x: auto; scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.insta-scroll::-webkit-scrollbar { display: none; }
+.insta-thumb {
+  flex-shrink: 0;
+  width: 180px; height: 180px;
+  border-radius: 6px; overflow: hidden;
+  position: relative; cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.25s, transform 0.25s;
+}
+.insta-thumb:hover {
+  border-color: var(--gold-light);
+  transform: translateY(-4px);
+}
+.insta-thumb img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(0.75);
+  transition: filter 0.3s;
+}
+.insta-thumb:hover img { filter: brightness(1); }
+.insta-icon {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; opacity: 0.6;
+  transition: opacity 0.25s;
+}
+.insta-thumb:hover .insta-icon { opacity: 0; }
+.insta-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 32px;
+  background: transparent; color: #fff;
+  font-family: var(--font-body); font-size: 12px;
+  font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+  padding: 14px 32px; border-radius: 4px;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  cursor: pointer; transition: all 0.2s;
+  text-decoration: none;
+}
+.insta-btn:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--gold-light); color: var(--gold-light);
+}
+
+/* ══════════════════════════════════════
+   CTA BAND
+   ══════════════════════════════════════ */
+.cta-band {
+  background: var(--maroon);
+  padding: 56px 48px;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 40px;
+}
+.cta-title {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 40px);
+  font-weight: 900; color: #fff;
+  text-transform: uppercase; line-height: 1.1;
+}
+.cta-title em { font-style: italic; color: var(--gold-light); }
+.cta-sub { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 8px; }
+.cta-actions { display: flex; gap: 14px; flex-shrink: 0; flex-wrap: wrap; }
+.btn-white {
+  background: #fff; color: var(--maroon);
+  font-family: var(--font-body); font-size: 12px;
+  font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  padding: 14px 28px; border-radius: 4px; border: none;
+  cursor: pointer; transition: opacity 0.2s;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-white:hover { opacity: 0.88; }
+.btn-outline-wh {
+  background: transparent; color: #fff;
+  font-family: var(--font-body); font-size: 12px;
+  font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  padding: 12px 28px; border-radius: 4px;
+  border: 2px solid rgba(255,255,255,0.45);
+  cursor: pointer; transition: all 0.2s;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-outline-wh:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
+
+/* ══════════════════════════════════════
+   FOOTER
+   ══════════════════════════════════════ */
+footer {
+  background: var(--dark1);
+  padding: 40px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 20px; font-weight: 700;
+  color: #fff; text-transform: uppercase; letter-spacing: 2px;
+}
+.footer-logo span { color: var(--gold-light); }
+.footer-mid { font-size: 12px; color: rgba(255,255,255,0.38); text-align: center; line-height: 1.8; }
+.footer-right { text-align: right; }
+.footer-phone {
+  font-family: var(--font-display);
+  font-size: 20px; font-weight: 700; color: var(--green-light);
+}
+.footer-email { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 4px; }
+
+/* ══════════════════════════════════════
+   LIGHTBOX
+   ══════════════════════════════════════ */
+.lightbox {
+  display: none;
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(10,6,2,0.96);
+  align-items: center; justify-content: center;
+  flex-direction: column;
+  animation: fadeIn 0.25s ease;
+}
+.lightbox.open { display: flex; }
+.lightbox-inner {
+  position: relative;
+  max-width: min(92vw, 1100px);
+  max-height: 88vh;
+  display: flex; flex-direction: column; align-items: center;
+  animation: popIn 0.3s ease;
+}
+.lightbox-img {
+  max-width: 100%; max-height: 72vh;
+  border-radius: 6px;
+  object-fit: contain;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.7);
+  display: block;
+}
+.lightbox-caption {
+  margin-top: 20px; text-align: center;
+}
+.lightbox-cat {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: var(--gold-light); margin-bottom: 6px;
+}
+.lightbox-title {
+  font-family: var(--font-display);
+  font-size: 22px; font-weight: 700;
+  color: #fff; line-height: 1.3;
+}
+.lightbox-close {
+  position: fixed; top: 24px; right: 28px;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  color: #fff; font-size: 20px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s;
+}
+.lightbox-close:hover { background: var(--maroon); border-color: var(--maroon); }
+.lightbox-nav {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  display: flex; justify-content: space-between;
+  width: calc(100% - 40px); left: 20px;
+  pointer-events: none;
+}
+.lightbox-arrow {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(255,255,255,0.2);
+  color: #fff; font-size: 20px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; pointer-events: all;
+  transition: all 0.2s;
+}
+.lightbox-arrow:hover { background: var(--maroon); border-color: var(--maroon); }
+.lightbox-counter {
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+.lightbox-dots {
+  display: flex; gap: 6px; margin-top: 20px; justify-content: center;
+}
+.lightbox-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  transition: background 0.2s, transform 0.2s;
+}
+.lightbox-dot.active {
+  background: var(--gold-light);
+  transform: scale(1.4);
+}
+
+/* ══════════════════════════════════════
+   MOBILE STICKY
+   ══════════════════════════════════════ */
+.sticky-bar {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 500;
+  background: var(--dark1);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 10px 20px max(10px, env(safe-area-inset-bottom));
+}
+.sticky-inner { display: flex; justify-content: space-around; }
+.sticky-btn {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 4px;
+  padding: 5px 12px; text-decoration: none;
+}
+.sticky-icon { font-size: 20px; }
+.sticky-label {
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+
+/* ══════════════════════════════════════
+   SCROLL REVEAL
+   ══════════════════════════════════════ */
+.reveal { opacity:0; transform:translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .masonry { columns: 3 240px; }
+  .featured-row { grid-template-columns: 1fr 1fr; grid-template-rows: 280px; }
+  .featured-row .gallery-item:last-child { display: none; }
+  header, .filter-bar, .gallery-body,
+  .insta-strip, .cta-band, footer { padding-left: 24px; padding-right: 24px; }
+  .gallery-hero { padding: 60px 24px 56px; }
+}
+@media (max-width: 768px) {
+  .masonry { columns: 2 160px; }
+  .featured-row { grid-template-columns: 1fr; grid-template-rows: 260px; }
+  .featured-row .gallery-item:not(:first-child) { display: none; }
+  .insta-strip { padding: 48px 24px; }
+  .cta-band { flex-direction: column; text-align: center; padding: 48px 24px; }
+  .cta-actions { justify-content: center; }
+  footer { flex-direction: column; gap: 20px; text-align: center; }
+  .footer-right { text-align: center; }
+  .sticky-bar { display: block; }
+  body { padding-bottom: 64px; }
+  .hero-stats { gap: 28px; }
+  .view-toggle { display: none; }
+  .lightbox-arrow { width: 40px; height: 40px; font-size: 16px; }
+}
+@media (max-width: 480px) {
+  .masonry { columns: 2 140px; column-gap: 10px; }
+  .masonry .gallery-item { margin-bottom: 10px; }
+  header { padding: 0 16px; }
+  .back-link span { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- MARQUEE -->
+<div class="marquee-bar">
+  <div class="marquee-inner">
+    <span>GARDEN DINING</span><span>NOIDA SECTOR 18</span>
+    <span>LIVE GHAZAL EVERY FRIDAY</span>
+    <span>OPEN DAILY 12PM – 11PM</span>
+    <span>BANQUET HALL AVAILABLE</span>
+    <span>SWIGGY 4.7 ★</span>
+    <span>FOLLOW US @ZAIQAGARDEN</span>
+    <span>GARDEN DINING</span><span>NOIDA SECTOR 18</span>
+    <span>LIVE GHAZAL EVERY FRIDAY</span>
+    <span>OPEN DAILY 12PM – 11PM</span>
+    <span>BANQUET HALL AVAILABLE</span>
+    <span>SWIGGY 4.7 ★</span>
+    <span>FOLLOW US @ZAIQAGARDEN</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header id="mainHeader">
+  <div class="logo">
+    <div class="logo-icon">✦</div>
+    <div>
+      <div class="logo-name">Zaiqa <span>Gar</span>den</div>
+      <span class="logo-sub">Garden Dining · Noida</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="index.html" class="back-link">← <span>Back to Home</span></a>
+    <a href="tel:+919508351404" class="btn-reserve">📞 Reserve Table</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="gallery-hero">
+  <span class="hero-eyebrow">A Visual Feast</span>
+  <h1 class="hero-title">Our <em>Gallery</em></h1>
+  <p class="hero-sub">Food · Ambience · Events · Kitchen · Happy Faces</p>
+  <div class="hero-divider"></div>
+  <div class="hero-stats">
+    <div>
+      <div class="hero-stat-num">120+</div>
+      <div class="hero-stat-label">Photos</div>
+    </div>
+    <div>
+      <div class="hero-stat-num">5</div>
+      <div class="hero-stat-label">Categories</div>
+    </div>
+    <div>
+      <div class="hero-stat-num">8+</div>
+      <div class="hero-stat-label">Years of Moments</div>
+    </div>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <div class="filter-pills">
+      <button class="filter-pill active" data-filter="all">All Photos <span class="filter-pill-count" id="cnt-all">24</span></button>
+      <button class="filter-pill" data-filter="food">Food <span class="filter-pill-count" id="cnt-food">10</span></button>
+      <button class="filter-pill" data-filter="ambience">Ambience <span class="filter-pill-count" id="cnt-ambience">6</span></button>
+      <button class="filter-pill" data-filter="events">Events <span class="filter-pill-count" id="cnt-events">4</span></button>
+      <button class="filter-pill" data-filter="kitchen">Kitchen <span class="filter-pill-count" id="cnt-kitchen">2</span></button>
+      <button class="filter-pill" data-filter="people">People <span class="filter-pill-count" id="cnt-people">2</span></button>
+    </div>
+    <div class="view-toggle">
+      <button class="view-btn active" id="btn4col" title="4 columns">⊞</button>
+      <button class="view-btn" id="btn3col" title="3 columns">⊟</button>
+      <button class="view-btn" id="btn2col" title="2 columns">▬</button>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY BODY -->
+<div class="gallery-body">
+
+  <div class="count-bar reveal">
+    <div class="count-text">Showing <strong id="visCount">24</strong> photos</div>
+    <div class="count-text" style="font-size:11px; letter-spacing:2px; text-transform:uppercase;">Click any photo to expand</div>
+  </div>
+
+  <!-- FEATURED TOP ROW -->
+  <div class="featured-row reveal" id="featuredRow">
+    <div class="gallery-item" data-cat="ambience" data-title="The Garden at Dusk" data-index="0"
+         onclick="openLightbox(0)">
+      <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&q=85" alt="Garden Ambience">
+      <div class="item-cat-badge badge-ambience">Ambience</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Ambience</div>
+        <div class="overlay-title">The Garden at Dusk</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-cat="food" data-title="Awadhi Dum Biryani" data-index="1"
+         onclick="openLightbox(1)">
+      <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=600&q=85" alt="Biryani">
+      <div class="item-cat-badge badge-food">Food</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Food</div>
+        <div class="overlay-title">Awadhi Dum Biryani</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-cat="events" data-title="Anniversary Celebration" data-index="2"
+         onclick="openLightbox(2)">
+      <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=85" alt="Events">
+      <div class="item-cat-badge badge-events">Events</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Events</div>
+        <div class="overlay-title">Anniversary Celebration</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASONRY GRID -->
+  <div class="masonry reveal" id="masonryGrid">
+
+    <div class="gallery-item" data-cat="food" data-title="Seekh Kebab Platter" data-index="3" onclick="openLightbox(3)">
+      <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=500&q=80" alt="Seekh Kebab">
+      <div class="item-cat-badge badge-food">Food</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Food</div>
+        <div class="overlay-title">Seekh Kebab Platter</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="ambience" data-title="Fairy Light Evenings" data-index="4" onclick="openLightbox(4)">
+      <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=500&q=80" alt="Ambience">
+      <div class="item-cat-badge badge-ambience">Ambience</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Ambience</div>
+        <div class="overlay-title">Fairy Light Evenings</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="food" data-title="Tandoori Chicken" data-index="5" onclick="openLightbox(5)">
+      <img src="https://images.unsplash.com/photo-1569058242567-93de6f36f8e6?w=500&q=80" alt="Tandoori Chicken">
+      <div class="item-cat-badge badge-food">Food</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Food</div>
+        <div class="overlay-title">Tandoori Chicken</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="events" data-title="Birthday Party Setup" data-index="6" onclick="openLightbox(6)">
+      <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500&q=80" alt="Birthday">
+      <div class="item-cat-badge badge-events">Events</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Events</div>
+        <div class="overlay-title">Birthday Party Setup</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="food" data-title="Shahi Paneer" data-index="7" onclick="openLightbox(7)">
+      <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=500&q=80" alt="Shahi Paneer">
+      <div class="item-cat-badge badge-food">Food</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Food</div>
+        <div class="overlay-title">Shahi Paneer</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="kitchen" data-title="The Live Grill Station" data-index="8" onclick="openLightbox(8)">
+      <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500&q=80" alt="Kitchen">
+      <div class="item-cat-badge badge-kitchen">Kitchen</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Kitchen</div>
+        <div class="overlay-title">The Live Grill Station</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="food" data-title="Mixed Grill Sizzler" data-index="9" onclick="openLightbox(9)">
+      <img src="https://images.unsplash.com/photo-1562967914-608f82629710?w=500&q=80" alt="Mixed Grill">
+      <div class="item-cat-badge badge-food">Food</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Food</div>
+        <div class="overlay-title">Mixed Grill Sizzler</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="ambience" data-title="Outdoor Seating" data-index="10" onclick="openLightbox(10)">
+      <img src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=500&q=80" alt="Outdoor Seating">
+      <div class="item-cat-badge badge-ambience">Ambience</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Ambience</div>
+        <div class="overlay-title">Outdoor Seating</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="food" data-title="Dal Makhani" data-index="11" onclick="openLightbox(11)">
+      <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?w=500&q=80" alt="Dal Makhani">
+      <div class="item-cat-badge badge-food">Food</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Food</div>
+        <div class="overlay-title">Dal Makhani</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="people" data-title="Families & Friends" data-index="12" onclick="openLightbox(12)">
+      <img src="https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=500&q=80" alt="People">
+      <div class="item-cat-badge badge-people">People</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">People</div>
+        <div class="overlay-title">Families & Friends</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="food" data-title="Garden Rose Sharbat" data-index="13" onclick="openLightbox(13)">
+      <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500&q=80" alt="Drinks">
+      <div class="item-cat-badge badge-food">Drinks</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Drinks</div>
+        <div class="overlay-title">Garden Rose Sharbat</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="ambience" data-title="The Entrance" data-index="14" onclick="openLightbox(14)">
+      <img src="https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?w=500&q=80" alt="Entrance">
+      <div class="item-cat-badge badge-ambience">Ambience</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Ambience</div>
+        <div class="overlay-title">The Entrance</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="events" data-title="Private Dining Setup" data-index="15" onclick="openLightbox(15)">
+      <img src="https://images.unsplash.com/photo-1428515613728-6b4607e44363?w=500&q=80" alt="Private Dining">
+      <div class="item-cat-badge badge-events">Events</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Events</div>
+        <div class="overlay-title">Private Dining Setup</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="food" data-title="Kesar Phirni" data-index="16" onclick="openLightbox(16)">
+      <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=500&q=80" alt="Phirni">
+      <div class="item-cat-badge badge-food">Dessert</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Dessert</div>
+        <div class="overlay-title">Kesar Phirni</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="kitchen" data-title="Tandoor in Action" data-index="17" onclick="openLightbox(17)">
+      <img src="https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=500&q=80" alt="Tandoor">
+      <div class="item-cat-badge badge-kitchen">Kitchen</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Kitchen</div>
+        <div class="overlay-title">Tandoor in Action</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="food" data-title="Gulab Jamun" data-index="18" onclick="openLightbox(18)">
+      <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500&q=80" alt="Gulab Jamun">
+      <div class="item-cat-badge badge-food">Dessert</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Dessert</div>
+        <div class="overlay-title">Gulab Jamun</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="ambience" data-title="Evening Garden Lights" data-index="19" onclick="openLightbox(19)">
+      <img src="https://images.unsplash.com/photo-1567521464027-f127ff144326?w=500&q=80" alt="Garden Lights">
+      <div class="item-cat-badge badge-ambience">Ambience</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Ambience</div>
+        <div class="overlay-title">Evening Garden Lights</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="events" data-title="Corporate Lunch" data-index="20" onclick="openLightbox(20)">
+      <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&q=80" alt="Corporate">
+      <div class="item-cat-badge badge-events">Events</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Events</div>
+        <div class="overlay-title">Corporate Lunch</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="food" data-title="Malai Kulfi" data-index="21" onclick="openLightbox(21)">
+      <img src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=500&q=80" alt="Kulfi">
+      <div class="item-cat-badge badge-food">Dessert</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Dessert</div>
+        <div class="overlay-title">Malai Kulfi</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="people" data-title="Happy Diners" data-index="22" onclick="openLightbox(22)">
+      <img src="https://images.unsplash.com/photo-1543353071-087092ec393a?w=500&q=80" alt="Happy Diners">
+      <div class="item-cat-badge badge-people">People</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">People</div>
+        <div class="overlay-title">Happy Diners</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-cat="food" data-title="Chicken Malai Tikka" data-index="23" onclick="openLightbox(23)">
+      <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500&q=80" alt="Malai Tikka">
+      <div class="item-cat-badge badge-food">Food</div>
+      <div class="gallery-item-overlay">
+        <div class="overlay-cat">Food</div>
+        <div class="overlay-title">Chicken Malai Tikka</div>
+        <div class="overlay-expand">⤢</div>
+      </div>
+    </div>
+
+  </div><!-- /masonry -->
+</div><!-- /gallery-body -->
+
+<!-- INSTAGRAM STRIP -->
+<div class="insta-strip">
+  <div class="insta-eyebrow">Follow Our Journey</div>
+  <h2 class="insta-title">@ZaiqaGarden on <span>Instagram</span></h2>
+  <p class="insta-sub">Daily food stories, behind-the-scenes kitchen moments & garden evenings</p>
+  <div class="insta-scroll">
+    <div class="insta-thumb"><img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=300&q=80" alt="Insta"><div class="insta-icon">📷</div></div>
+    <div class="insta-thumb"><img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=300&q=80" alt="Insta"><div class="insta-icon">📷</div></div>
+    <div class="insta-thumb"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=300&q=80" alt="Insta"><div class="insta-icon">📷</div></div>
+    <div class="insta-thumb"><img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=300&q=80" alt="Insta"><div class="insta-icon">📷</div></div>
+    <div class="insta-thumb"><img src="https://images.unsplash.com/photo-1574484284002-952d92456975?w=300&q=80" alt="Insta"><div class="insta-icon">📷</div></div>
+    <div class="insta-thumb"><img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?w=300&q=80" alt="Insta"><div class="insta-icon">📷</div></div>
+    <div class="insta-thumb"><img src="https://images.unsplash.com/photo-1562967914-608f82629710?w=300&q=80" alt="Insta"><div class="insta-icon">📷</div></div>
+    <div class="insta-thumb"><img src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=300&q=80" alt="Insta"><div class="insta-icon">📷</div></div>
+  </div>
+  <a href="#" class="insta-btn">◎ &nbsp;Follow @ZaiqaGarden</a>
+</div>
+
+<!-- CTA BAND -->
+<div class="cta-band">
+  <div>
+    <div class="cta-title">Come Visit Us &<br><em>Make Your Own Memories</em></div>
+    <div class="cta-sub">Sector 18, Noida · Open Daily 12PM – 11PM · Banquet Available</div>
+  </div>
+  <div class="cta-actions">
+    <a href="tel:+919508351404" class="btn-white">📞 Reserve a Table</a>
+    <a href="https://wa.me/919508351404" class="btn-outline-wh">💬 WhatsApp Us</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Zaiqa <span>Garden</span></div>
+  <div class="footer-mid">Plot 14, Sector 18 Market, Noida, UP 201301<br>Open Daily · 12:00 PM – 11:00 PM</div>
+  <div class="footer-right">
+    <div class="footer-phone">+91 98760-00111</div>
+    <div class="footer-email">hello@zaiqagarden.in</div>
+  </div>
+</footer>
+
+<!-- Floating Social Bar -->
+<div class="floating-social-bar">
+  <a href="tel:+919508351404" class="floating-social-btn">
+    <span class="floating-social-icon"><img src="./phone.png" alt=""></span>
+  </a>
+  <a href="https://wa.me/919508351404" class="floating-social-btn">
+    <span class="floating-social-icon"><img src="./whatsapp.png" style="width: 250px;" alt=""></span>
+  </a>
+</div>
+
+<!-- MOBILE STICKY -->
+<div class="sticky-bar">
+  <div class="sticky-inner">
+    <a href="tel:+919508351404" class="sticky-btn">
+      <span class="sticky-icon"><img src="./phone.png" style="width: 50px;" alt=""></span>
+      <span class="sticky-label">Call</span>
+    </a>
+    <a href="https://wa.me/919508351404" class="sticky-btn">
+      <span class="sticky-icon"><img src="./whatsapp.png" style="width: 50px;" alt=""></span>
+      <span class="sticky-label" style="color:#a8d5b0">WhatsApp</span>
+    </a>
+    <a href="index.html" class="sticky-btn">
+      <span class="sticky-icon"><img src="./home.png" style="width: 50px; height: 50px;" alt="Home"></span>
+      <span class="sticky-label">Home</span>
+    </a>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <div class="lightbox-nav">
+    <button class="lightbox-arrow" onclick="shiftLightbox(-1)">←</button>
+    <button class="lightbox-arrow" onclick="shiftLightbox(1)">→</button>
+  </div>
+  <div class="lightbox-inner">
+    <img class="lightbox-img" id="lbImg" src="" alt="">
+    <div class="lightbox-caption">
+      <div class="lightbox-cat" id="lbCat"></div>
+      <div class="lightbox-title" id="lbTitle"></div>
+    </div>
+    <div class="lightbox-dots" id="lbDots"></div>
+  </div>
+  <div class="lightbox-counter" id="lbCounter"></div>
+</div>
+
+<script>
+/* ── DATA: all images ────────────────── */
+const photos = [
+  { src:'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&q=90', cat:'Ambience',  title:'The Garden at Dusk',        filter:'ambience' },
+  { src:'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=1200&q=90', cat:'Food',      title:'Awadhi Dum Biryani',         filter:'food'     },
+  { src:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=90', cat:'Events',    title:'Anniversary Celebration',    filter:'events'   },
+  { src:'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=90', cat:'Food',      title:'Seekh Kebab Platter',        filter:'food'     },
+  { src:'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1200&q=90', cat:'Ambience',  title:'Fairy Light Evenings',       filter:'ambience' },
+  { src:'https://images.unsplash.com/photo-1569058242567-93de6f36f8e6?w=1200&q=90', cat:'Food',   title:'Tandoori Chicken',           filter:'food'     },
+  { src:'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1200&q=90', cat:'Events', title:'Birthday Party Setup',       filter:'events'   },
+  { src:'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=1200&q=90', cat:'Food',   title:'Shahi Paneer',               filter:'food'     },
+  { src:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&q=90', cat:'Kitchen',  title:'The Live Grill Station',     filter:'kitchen'  },
+  { src:'https://images.unsplash.com/photo-1562967914-608f82629710?w=1200&q=90', cat:'Food',     title:'Mixed Grill Sizzler',        filter:'food'     },
+  { src:'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=1200&q=90', cat:'Ambience', title:'Outdoor Seating',         filter:'ambience' },
+  { src:'https://images.unsplash.com/photo-1574484284002-952d92456975?w=1200&q=90', cat:'Food',   title:'Dal Makhani',                filter:'food'     },
+  { src:'https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=1200&q=90', cat:'People', title:'Families & Friends',        filter:'people'   },
+  { src:'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=1200&q=90', cat:'Food',   title:'Garden Rose Sharbat',       filter:'food'     },
+  { src:'https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?w=1200&q=90', cat:'Ambience', title:'The Entrance',            filter:'ambience' },
+  { src:'https://images.unsplash.com/photo-1428515613728-6b4607e44363?w=1200&q=90', cat:'Events', title:'Private Dining Setup',      filter:'events'   },
+  { src:'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=1200&q=90', cat:'Food',     title:'Kesar Phirni',              filter:'food'     },
+  { src:'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=1200&q=90', cat:'Kitchen', title:'Tandoor in Action',        filter:'kitchen'  },
+  { src:'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=1200&q=90', cat:'Food',     title:'Gulab Jamun',               filter:'food'     },
+  { src:'https://images.unsplash.com/photo-1567521464027-f127ff144326?w=1200&q=90', cat:'Ambience', title:'Evening Garden Lights',   filter:'ambience' },
+  { src:'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&q=90', cat:'Events',   title:'Corporate Lunch',           filter:'events'   },
+  { src:'https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=1200&q=90', cat:'Food',     title:'Malai Kulfi',               filter:'food'     },
+  { src:'https://images.unsplash.com/photo-1543353071-087092ec393a?w=1200&q=90', cat:'People',   title:'Happy Diners',              filter:'people'   },
+  { src:'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=1200&q=90', cat:'Food',  title:'Chicken Malai Tikka',       filter:'food'     },
+];
+
+/* ── LIGHTBOX ────────────────────────── */
+let currentIndex = 0;
+let activePhotos = photos; // changes with filter
+
+function openLightbox(index) {
+  currentIndex = index;
+  renderLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function shiftLightbox(dir) {
+  currentIndex = (currentIndex + dir + activePhotos.length) % activePhotos.length;
+  renderLightbox();
+}
+function renderLightbox() {
+  const p = activePhotos[currentIndex];
+  const img = document.getElementById('lbImg');
+  img.style.opacity = '0';
+  img.src = p.src;
+  img.onload = () => { img.style.transition = 'opacity 0.3s'; img.style.opacity = '1'; };
+  document.getElementById('lbCat').textContent   = p.cat;
+  document.getElementById('lbTitle').textContent = p.title;
+  document.getElementById('lbCounter').textContent =
+    `${currentIndex + 1} / ${activePhotos.length}`;
+  // dots (only show up to 9)
+  const dotsEl = document.getElementById('lbDots');
+  const maxDots = Math.min(activePhotos.length, 9);
+  dotsEl.innerHTML = Array.from({length: maxDots}, (_,i) =>
+    `<div class="lightbox-dot ${i === currentIndex % maxDots ? 'active' : ''}"></div>`
+  ).join('');
+}
+// keyboard nav
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape')     closeLightbox();
+  if (e.key === 'ArrowRight') shiftLightbox(1);
+  if (e.key === 'ArrowLeft')  shiftLightbox(-1);
+});
+// click outside to close
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+});
+
+/* ── FILTER ──────────────────────────── */
+const filterBtns = document.querySelectorAll('.filter-pill');
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    const allItems = document.querySelectorAll('#masonryGrid .gallery-item');
+    let count = 0;
+    allItems.forEach(item => {
+      const match = filter === 'all' || item.dataset.cat === filter;
+      item.classList.toggle('hidden', !match);
+      if (match) count++;
+    });
+    // featured row visibility
+    const featItems = document.querySelectorAll('#featuredRow .gallery-item');
+    featItems.forEach(item => {
+      const match = filter === 'all' || item.dataset.cat === filter;
+      item.style.display = match ? '' : 'none';
+    });
+    // update active photos for lightbox
+    activePhotos = filter === 'all' ? photos : photos.filter(p => p.filter === filter);
+    currentIndex = 0;
+    // update count
+    document.getElementById('visCount').textContent = activePhotos.length;
+  });
+});
+
+/* ── VIEW TOGGLE ─────────────────────── */
+const grid    = document.getElementById('masonryGrid');
+document.getElementById('btn4col').addEventListener('click', function() {
+  grid.className = 'masonry reveal visible';
+  setActiveView(this);
+});
+document.getElementById('btn3col').addEventListener('click', function() {
+  grid.className = 'masonry grid-3 reveal visible';
+  setActiveView(this);
+});
+document.getElementById('btn2col').addEventListener('click', function() {
+  grid.className = 'masonry grid-2 reveal visible';
+  setActiveView(this);
+});
+function setActiveView(btn) {
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* ── SCROLL REVEAL ───────────────────── */
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.07 });
+reveals.forEach(el => io.observe(el));
+
+/* ── HEADER ELEVATION ────────────────── */
+window.addEventListener('scroll', () => {
+  document.getElementById('mainHeader').classList.toggle('elevated', scrollY > 10);
+});
+</script>
+</body>
+</html>
